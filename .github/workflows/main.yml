@@ -21,17 +21,12 @@ jobs:
         run: sudo apt install curl jq xxd -y
       - name: Check msedge
         run: |
-          cur_dir=$(
-              cd $(dirname $0)
-              pwd
-          )
           rm -f msedge
           cd check/
           bash check-msedge.sh
           mv msedge.json ../msedge
       - name: Commit files
         run: |
-          cd cur_dir
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
           # git add .
