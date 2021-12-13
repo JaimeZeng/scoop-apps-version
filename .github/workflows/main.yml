@@ -21,20 +21,10 @@ jobs:
         run: sudo apt install curl jq xxd -y
       - name: Config git
         run: |
-          cur_dir=$(cd "$(dirname "$0")"; pwd)
-          check_dir="${cur_dir}/check"
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
       - name: Check msedge
-        run: |
-          cd ${check_dir}
-          bash check-msedge.sh
-          git commit -am "version: update MSEdge"
-      - name: Check MouseInc
-        run: |
-          cd ${check_dir}
-          bash check-mouseinc.sh
-          git commit -am "version: update MouseInc"
+        run: bash check.sh
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
