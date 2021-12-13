@@ -1,0 +1,52 @@
+{
+    "redirects": [
+        {
+            "source": "/msedge-stable-win-ARM64",
+            "destination": "msedge-stable-win-ARM64-url"
+        },
+        {
+            "source": "/msedge-stable-win-X86",
+            "destination": "msedge-stable-win-X86-url"
+        },
+        {
+            "source": "/msedge-stable-win-X64",
+            "destination": "msedge-stable-win-X64-url"
+        },
+        {
+            "source": "/msedge-beta-win-ARM64",
+            "destination": "msedge-beta-win-ARM64-url"
+        },
+        {
+            "source": "/msedge-beta-win-X86",
+            "destination": "msedge-beta-win-X86-url"
+        },
+        {
+            "source": "/msedge-beta-win-X64",
+            "destination": "msedge-beta-win-X64-url"
+        },
+        {
+            "source": "/msedge-dev-win-ARM64",
+            "destination": "msedge-dev-win-ARM64-url"
+        },
+        {
+            "source": "/msedge-dev-win-X86",
+            "destination": "msedge-dev-win-X86-url"
+        },
+        {
+            "source": "/msedge-dev-win-X64",
+            "destination": "msedge-dev-win-X64-url"
+        },
+        {
+            "source": "/msedge-canary-win-ARM64",
+            "destination": "msedge-canary-win-ARM64-url"
+        },
+        {
+            "source": "/msedge-canary-win-X86",
+            "destination": "msedge-canary-win-X86-url"
+        },
+        {
+            "source": "/msedge-canary-win-X64",
+            "destination": "msedge-canary-win-X64-url"
+        }
+    ]
+}

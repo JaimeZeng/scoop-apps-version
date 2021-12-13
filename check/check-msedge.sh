@@ -30,6 +30,7 @@ function getGeneratedVersionInfo() {
     versionArr=($(getLatestVersion ".stable" ".beta" ".dev" ".canary"))
     # first run
     cp msedge.src.json msedge.json
+    cp link.src.json link.json
     sed -e "s|check-time|${DATE}|g" -i msedge.json
     for ((i = 0; i < ${#productArr[@]}; i++)); do
         sed -e "s|msedge-${productArr[i]}-win-ver|${versionArr[i]}|g" -i msedge.json
@@ -55,10 +56,13 @@ function getGeneratedVersionInfo() {
                 -e "s|msedge-${productArr[i]}-win-${arch}-size|${releaseInfoSizeInBytes}|g" \
                 -i \
                 msedge.json
+
+            sed -e "s|msedge-${productArr[i]}-win-${arch}-url|${releaseInfoUrl}|g" -i link.json
         done
     done
     # do not prompt before overwriting
     mv -f msedge.json ../msedge
+    mv -f link.json ../now.json
 }
 
 function compareVersion() {
