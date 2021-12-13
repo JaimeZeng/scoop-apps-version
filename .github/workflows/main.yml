@@ -19,19 +19,22 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependence
         run: sudo apt install curl jq xxd -y
-      - name: Check msedge
+      - name: Config git
         run: |
-          rm -f msedge
-          cd check/
-          bash check-msedge.sh
-          mv msedge.json ../msedge
-      - name: Commit files
-        run: |
+          cur_dir=$(cd "$(dirname "$0")"; pwd)
+          check_dir="${cur_dir}/check"
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
-          # git add .
-          # git commit -m "version: Add msedge"
-          git commit -am "version: Add msedge"
+      - name: Check msedge
+        run: |
+          cd ${check_dir}
+          bash check-msedge.sh
+          git commit -am "version: update MSEdge"
+      - name: Check MouseInc
+        run: |
+          cd ${check_dir}
+          bash check-mouseinc.sh
+          git commit -am "version: update MouseInc"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
