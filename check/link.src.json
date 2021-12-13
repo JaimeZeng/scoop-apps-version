@@ -47,6 +47,18 @@
         {
             "source": "/msedge-canary-win-X64",
             "destination": "msedge-canary-win-X64-url"
+        },
+        {
+            "source": "/msedge",
+            "destination": "https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/msedge"
+        },
+        {
+            "source": "/MouseInc",
+            "destination": "https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/MouseInc"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "https://github.com/JaimeZeng/scoop-apps-version"
         }
     ]
 }
