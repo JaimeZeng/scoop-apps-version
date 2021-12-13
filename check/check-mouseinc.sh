@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-set -euxo pipefail
+# set -euxo pipefail
 
 DATE="$(echo $(TZ=UTC date '+%Y-%m-%d %H:%M:%S'))"
 tmpFile="./action.tmp"
@@ -42,8 +42,6 @@ function getGeneratedVersionInfo() {
     descriptionArr=($(curl -s -A "$userAgent" "$versionUrl" | jq -r ".description"))
     description=$(echo "${descriptionArr[*]}" | sed 's/ /- /g')
     url=$(echo ${info[1]} | sed -e 's/[]&\/$*.^[]/\\&/g')
-    echo "${url}"
-    echo "${description}"
 
     cp mouseinc.src.json mouseinc.json
     sed -e "s|Check-Time|${DATE}|g" \
