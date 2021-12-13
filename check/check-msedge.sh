@@ -30,7 +30,10 @@ function getGeneratedVersionInfo() {
             echo "${request}"
             releaseInfo=($(echo "$request" | jq '.Hashes = .Hashes.Sha256'))
             releaseInfoFileId=$(echo "$request" | jq -r '.FileId')
-            releaseInfoUrl=$(echo "$request" | jq -r '.Url')
+            # & is special in the replacement text: it means “the whole part of the input that was matched by the pattern”
+            # https://stackoverflow.com/questions/407523/escape-a-string-for-a-sed-replace-pattern/2705678#2705678
+            # https://unix.stackexchange.com/questions/296705/using-sed-with-ampersand/296732#296732
+            releaseInfoUrl=$(echo "$request" | jq -r '.Url' | sed -e 's/[]&\/$*.^[]/\\&/g')
             # SHA256 HMAC -> SHA256
             releaseInfoSha256HashesArr=($(echo "$request" | jq -r '.Hashes.Sha256' | base64 -d | xxd -p))
             releaseInfoSha256Hashes=$(echo "${releaseInfoSha256HashesArr[*]}" | sed 's/ //g')
