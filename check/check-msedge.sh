@@ -1,13 +1,25 @@
-#!/bin/bash
-PATH="/usr/local/bin:/usr/bin:/bin"
-set -euxo pipefail
+#!/usr/bin/env bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+# set -euxo pipefail
 
 userAgent="Microsoft Edge Update/1.3.139.59;winhttp"
 DATE="$(echo $(TZ=UTC date '+%Y-%m-%d %H:%M:%S'))"
 
+Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
+Info="${Green_font_prefix}[Info]${Font_color_suffix}"
+Error="${Red_font_prefix}[Error]${Font_color_suffix}"
+Tip="${Green_font_prefix}[Tip]${Font_color_suffix}"
+
 function getLatestVersion() {
     local versionUrl="https://www.microsoftedgeinsider.com/api/versions"
-    curl -A "$userAgent" "$versionUrl" | jq -r "$1, $2, $3, $4"
+    curl -s -A "$userAgent" "$versionUrl" | jq -r ".stable, .beta, .dev, .canary"
+    return $?
+}
+
+function getLocalVersion() {
+    local versionUrl="https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/msedge"
+    curl -s -A "$userAgent" "$versionUrl" | jq -r '.[].Version'
     return $?
 }
 
@@ -16,9 +28,7 @@ function getGeneratedVersionInfo() {
     archArr=("X64" "X86" "ARM64")
     productArr=("stable" "beta" "dev" "canary")
     versionArr=($(getLatestVersion ".stable" ".beta" ".dev" ".canary"))
-
     # first run
-    rm -f msedge.json
     cp msedge.src.json msedge.json
     sed -e "s|check-time|${DATE}|g" -i msedge.json
     for ((i = 0; i < ${#productArr[@]}; i++)); do
@@ -27,7 +37,7 @@ function getGeneratedVersionInfo() {
             edgeUrl="https://msedge.api.cdp.microsoft.com/api/v1.1/internal/contents/Browser/namespaces/Default/names/msedge-${productArr[i]}-win-$arch/versions/${versionArr[i]}/files?action=GenerateDownloadInfo&foregroundPriority=true"
             fileName="MicrosoftEdge_${arch}_${versionArr[i]}.exe"
             request=$(curl -k -s -A "${userAgent}" "${edgeUrl}" -X POST -d "{\"targetingAttributes\":{}}" | jq --arg NAME ${fileName} '.[] | select(.FileId==$NAME)' | jq 'del(.Hashes.Sha1, .DeliveryOptimization)')
-            echo "${request}"
+
             releaseInfo=($(echo "$request" | jq '.Hashes = .Hashes.Sha256'))
             releaseInfoFileId=$(echo "$request" | jq -r '.FileId')
             # & is special in the replacement text: it means “the whole part of the input that was matched by the pattern”
@@ -47,7 +57,22 @@ function getGeneratedVersionInfo() {
                 msedge.json
         done
     done
+    # do not prompt before overwriting
+    mv -f msedge.json ../msedge
+}
+
+function compareVersion() {
+    latestversionArr=($(getLatestVersion ".stable" ".beta" ".dev" ".canary"))
+    localVersionArr=($(getLocalVersion))
+
+    # Compare Version
+    if [[ "${latestversionArr[0]}" == "${localVersionArr[0]}" ]] && [[ "${latestversionArr[1]}" == "${localVersionArr[1]}" ]] && [[ "${latestversionArr[2]}" == "${localVersionArr[2]}" ]] && [[ "${latestversionArr[3]}" == "${localVersionArr[3]}" ]]; then
+        echo -e "${Green_font_prefix}[Info] MSEdge is the latest version!${Font_color_suffix}"
+    else
+        echo -e "${Green_font_prefix}[Info] Update MSEdge!${Font_color_suffix}"
+        getGeneratedVersionInfo
+    fi
 }
 
 # sudo apt install curl jq xxd -y
-getGeneratedVersionInfo
+compareVersion
