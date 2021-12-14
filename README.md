@@ -1,0 +1,22 @@
+## scoop-apps-version
+
+- msedge
+  - version：`/msedge`
+  - file
+    - stable
+      - `/msedge-stable-win-ARM64`
+      - `/msedge-stable-win-X86`
+      - `/msedge-stable-win-X64`
+    - beta
+      - `/msedge-beta-win-ARM64`
+      - `/msedge-beta-win-X86`
+      - `/msedge-beta-win-X64`
+    - dev
+      - `/msedge-dev-win-ARM64`
+      - `/msedge-dev-win-X86`
+      - `/msedge-dev-win-X64`
+    - canary
+      - `/msedge-canary-win-ARM64`
+      - `/msedge-canary-win-X86`
+      - `/msedge-canary-win-X64`
+- MouseInc: `/MouseInc`
