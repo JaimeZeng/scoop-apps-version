@@ -1,14 +1,14 @@
 name: Check
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
   schedule:
-    - cron: "30 7 * * *"
+    - cron: "30 11,23 * * *"
   workflow_dispatch:
 
 jobs:
@@ -17,16 +17,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
       - name: Install Dependence
         run: sudo apt install curl jq xxd -y
       - name: Config git
         run: |
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
+          git remote add github git@github.com:JaimeZeng/scoop-apps-version.git
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # gh secret set SSH_PRIVATE_KEY < ~/.ssh/id_ed25519
       - name: Check msedge
         run: bash check.sh
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.TOKEN }}
-          branch: ${{ github.ref }}
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.TOKEN }}
+      #     branch: ${{ github.ref }}
