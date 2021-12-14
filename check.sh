@@ -20,10 +20,10 @@ cd ${check_dir}
 echo -e "Check MSEdge..."
 bash check-msedge.sh
 git commit -am "version: update MSEdge"
-git push origin main
+git push origin github
 
 cd ${check_dir}
 echo -e "Check MouseInc..."
 bash check-mouseinc.sh
 git commit -am "version: update MouseInc"
-git push origin main
+git push origin github
