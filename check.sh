@@ -20,10 +20,8 @@ cd ${check_dir}
 echo -e "Check MSEdge..."
 bash check-msedge.sh
 git commit -am "version: update MSEdge"
-git push https://${GH_PAT}@github.com/JaimeZeng/scoop-apps-version.git
 
 cd ${check_dir}
 echo -e "Check MouseInc..."
 bash check-mouseinc.sh
 git commit -am "version: update MouseInc"
-git push https://${GH_PAT}@github.com/JaimeZeng/scoop-apps-version.git
