@@ -11,6 +11,9 @@ on:
     - cron: "30 11,23 * * *"
   workflow_dispatch:
 
+env:
+  GH_PAT: ${{ secrets.TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,10 +29,10 @@ jobs:
         run: |
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
-          git remote add github git@github.com:JaimeZeng/scoop-apps-version.git
-      - uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # gh secret set SSH_PRIVATE_KEY < ~/.ssh/id_ed25519
+      # - uses: webfactory/ssh-agent@v0.5.4
+      #   with:
+      #     # gh secret set SSH_PRIVATE_KEY < ~/.ssh/id_ed25519
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Check msedge
         run: bash check.sh
       # - name: Push changes
