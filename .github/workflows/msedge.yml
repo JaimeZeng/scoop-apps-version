@@ -1,4 +1,4 @@
-name: Check
+name: Check MSEdge
 
 on:
   # push:
