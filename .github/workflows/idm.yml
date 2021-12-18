@@ -1,4 +1,4 @@
-name: Check MouseInc
+name: Check IDM
 
 on:
   # push:
@@ -21,7 +21,7 @@ jobs:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
       - name: Install Dependence
-        run: sudo apt install curl jq xxd aria2 -y
+        run: sudo apt install aria2 -y
       - name: Config git
         run: |
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
