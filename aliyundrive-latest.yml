@@ -1,0 +1,8 @@
+version: 2.3.4
+files:
+  - url: https://tongyongxiezuo.oss-cn-zhangjiakou.aliyuncs.com/desktop/aDrive-desktop/2.3.4/update/win32/ia32/aDrive-2.3.4.exe
+    sha512: 8hPuxsisI2F/L9uvt75PXft9RuNX4EE5mQl75kbXvbf7dmp0yekH6vocLVqh3rA6aQ0yaNlx9zwpfYK3Lnlnag==
+    size: 73185139
+path: aDrive-2.3.4.exe
+sha512: 8hPuxsisI2F/L9uvt75PXft9RuNX4EE5mQl75kbXvbf7dmp0yekH6vocLVqh3rA6aQ0yaNlx9zwpfYK3Lnlnag==
+releaseDate: 2021-12-20T09:28:36.360Z
