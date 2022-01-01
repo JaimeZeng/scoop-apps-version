@@ -18,8 +18,9 @@ function getLatestVersion() {
 }
 
 function getLocalVersion() {
-    local versionUrl="https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/msedge"
-    curl -s -A "$userAgent" "$versionUrl" | jq -r '.[].Version'
+    # local versionUrl="https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/msedge"
+    # curl -s -A "$userAgent" "$versionUrl" | jq -r '.[].Version'
+    cat ../msedge | jq -r '.[].Version'
     return $?
 }
 
@@ -66,15 +67,18 @@ function getGeneratedVersionInfo() {
 }
 
 function compareVersion() {
-    latestversionArr=($(getLatestVersion ".stable" ".beta" ".dev" ".canary"))
+    latestVersionArr=($(getLatestVersion ".stable" ".beta" ".dev" ".canary"))
     localVersionArr=($(getLocalVersion))
+    echo "Latest version： ${latestVersionArr[*]}"
+    echo "Local version： ${localVersionArr[*]}"
 
     # Compare Version
-    if [[ "${latestversionArr[0]}" == "${localVersionArr[0]}" ]] && [[ "${latestversionArr[1]}" == "${localVersionArr[1]}" ]] && [[ "${latestversionArr[2]}" == "${localVersionArr[2]}" ]] && [[ "${latestversionArr[3]}" == "${localVersionArr[3]}" ]]; then
+    if [[ "${latestVersionArr[0]}" == "${localVersionArr[0]}" ]] && [[ "${latestVersionArr[1]}" == "${localVersionArr[1]}" ]] && [[ "${latestVersionArr[2]}" == "${localVersionArr[2]}" ]] && [[ "${latestVersionArr[3]}" == "${localVersionArr[3]}" ]]; then
         echo -e "${Green_font_prefix}[Info] MSEdge is the latest version!${Font_color_suffix}"
     else
         echo -e "${Green_font_prefix}[Info] Update MSEdge!${Font_color_suffix}"
         getGeneratedVersionInfo
+        git commit -am "version: update MSEdge(stable: ${localVersionArr[0]} -> ${latestVersionArr[0]} beta: ${localVersionArr[1]} -> ${latestVersionArr[1]} dev: ${localVersionArr[2]} -> ${latestVersionArr[2]} canary: ${localVersionArr[3]} -> ${latestVersionArr[3]})" >/dev/null 2>&1
     fi
 }
 

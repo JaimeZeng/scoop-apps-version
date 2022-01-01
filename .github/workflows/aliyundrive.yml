@@ -2,7 +2,7 @@ name: Check aliyundrive
 
 on:
   schedule:
-    - cron: "25 23 * * *"
+    - cron: "5 23 * * *"
   workflow_dispatch:
 
 jobs:

@@ -1,14 +1,8 @@
-name: Check IDM
+name: Check
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
   schedule:
-    - cron: "10 23 * * *"
+    - cron: "5 23 * * *"
   workflow_dispatch:
 
 jobs:
@@ -20,16 +14,17 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Install Dependence
+        run: sudo apt install curl jq xxd -y
       - name: Config git
         run: |
           git config --local user.email "78083448+JaimeZeng@users.noreply.github.com"
           git config --local user.name "JaimeZeng"
-      - name: Check IDM
+      - name: Check
         run: |
           cd ./check
-          bash check-idm.sh
-          git commit -am "version: update IDM"
-      - name: Push IDM changes
+          bash check.sh
+      - name: Push aliyundrive changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.TOKEN }}

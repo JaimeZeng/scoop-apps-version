@@ -26,33 +26,45 @@ function getGeneratedVersionInfo() {
     local versionUrl="https://g.alicdn.com/aliyun-drive-fe/aliyun-drive-desktop-version/$ymlVersion/win32/ia32/latest.yml"
 
     info="$(curl -s -A "$userAgent" "$versionUrl")"
-    version="$(echo "$info" | grep -Po "version:.*" | grep -Po "[\d.]+")"
-    url="$(echo "$info" | grep -Po "url:.*" | grep -Po "http.*" | sed -e 's/[]&\/$*.^[]/\\&/g')"
-    size="$(echo "$info" | grep -Po "size:.*" | grep -Po "[\d]+")"
-    releaseDate="$(echo "$info" | grep -Po "releaseDate:.*" | grep -Po "20.*Z")"
-    base64="$(echo "$info" | grep -Po "[\s]+sha512:.*" | grep -Po "([a-zA-Z0-9+\/=]{24,88})" | sed -e 's/\//\\&/g')"
+    latestVersion="$(echo "$info" | grep -Po "version:.*" | grep -Po "[\d.]+")"
+    localVersion="$(cat ../aliyundrive | jq -r ".version")"
+    echo "Latest version： ${latestVersion}"
+    echo "Local version： ${localVersion}"
 
-    # SHA512 HMAC -> SHA512
-    sha512Arr=($(echo "$info" | grep -Po "[\s]+sha512:.*" | grep -Po "([a-zA-Z0-9+\/=]{24,88})" | base64 -d | xxd -p))
-    sha512=$(echo "${sha512Arr[*]}" | sed 's/ //g')
+    # Compare Version
+    if [[ "${latestVersion}" == "${localVersion}" ]]; then
+        echo -e "${Green_font_prefix}[Info] aliyundrive is the latest version!${Font_color_suffix}"
+    else
+        echo -e "${Green_font_prefix}[Info] Update aliyundrive!${Font_color_suffix}"
 
-    # https://stackoverflow.com/a/2686369/17233489
-    # oldDestination="$(sed -e '/aliyundrive/,/destination/!d' | grep -o 'http.*exe')"
-    # oldDestination="$(sed -n '/aliyundrive/,/destination/p' | grep -o 'http.*exe')"
-    # sed -e "s|${oldDestination}|${url}|g" -i now.json
+        url="$(echo "$info" | grep -Po "url:.*" | grep -Po "http.*" | sed -e 's/[]&\/$*.^[]/\\&/g')"
+        size="$(echo "$info" | grep -Po "size:.*" | grep -Po "[\d]+")"
+        releaseDate="$(echo "$info" | grep -Po "releaseDate:.*" | grep -Po "20.*Z")"
+        base64="$(echo "$info" | grep -Po "[\s]+sha512:.*" | grep -Po "([a-zA-Z0-9+\/=]{24,88})" | sed -e 's/\//\\&/g')"
 
-    cp aliyundrive.src.json aliyundrive.json
-    sed -e "s|aliyundrive-checkTime|${DATE}|g" \
-        -e "s|aliyundrive-version|${version}|g" \
-        -e "s|aliyundrive-url|${url}|g" \
-        -e "s|aliyundrive-base64|${base64}|g" \
-        -e "s|aliyundrive-sha512|${sha512}|g" \
-        -e "s|aliyundrive-size|${size}|g" \
-        -e "s|aliyundrive-releaseDate|${releaseDate}|g" \
-        -i \
-        aliyundrive.json
-    # do not prompt before overwriting
-    mv -f aliyundrive.json ../aliyundrive
+        # SHA512 HMAC -> SHA512
+        sha512Arr=($(echo "$info" | grep -Po "[\s]+sha512:.*" | grep -Po "([a-zA-Z0-9+\/=]{24,88})" | base64 -d | xxd -p))
+        sha512=$(echo "${sha512Arr[*]}" | sed 's/ //g')
+
+        # https://stackoverflow.com/a/2686369/17233489
+        # oldDestination="$(sed -e '/aliyundrive/,/destination/!d' | grep -o 'http.*exe')"
+        # oldDestination="$(sed -n '/aliyundrive/,/destination/p' | grep -o 'http.*exe')"
+        # sed -e "s|${oldDestination}|${url}|g" -i now.json
+
+        cp aliyundrive.src.json aliyundrive.json
+        sed -e "s|aliyundrive-checkTime|${DATE}|g" \
+            -e "s|aliyundrive-version|${latestVersion}|g" \
+            -e "s|aliyundrive-url|${url}|g" \
+            -e "s|aliyundrive-base64|${base64}|g" \
+            -e "s|aliyundrive-sha512|${sha512}|g" \
+            -e "s|aliyundrive-size|${size}|g" \
+            -e "s|aliyundrive-releaseDate|${releaseDate}|g" \
+            -i \
+            aliyundrive.json
+        # do not prompt before overwriting
+        mv -f aliyundrive.json ../aliyundrive
+        git commit -am "version: update aliyundrive(${localVersion} -> ${latestVersion})" >/dev/null 2>&1
+    fi
 }
 
 # sudo apt install curl jq xxd -y

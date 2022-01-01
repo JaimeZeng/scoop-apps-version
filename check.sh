@@ -16,12 +16,8 @@ Info="${Green_font_prefix}[Info]${Font_color_suffix}"
 Error="${Red_font_prefix}[Error]${Font_color_suffix}"
 Tip="${Green_font_prefix}[Tip]${Font_color_suffix}"
 
-cd ${check_dir}
-echo -e "Check MSEdge..."
-bash check-msedge.sh
-git commit -am "version: update MSEdge"
-
-cd ${check_dir}
-echo -e "Check MouseInc..."
-bash check-mouseinc.sh
-git commit -am "version: update MouseInc"
+for item in {"aliyundrive", "idm", "mouseinc", "msedge", "office-iso"}; do
+    cd ${check_dir}
+    echo -e "Check ${item}..."
+    bash check-$item.sh
+done

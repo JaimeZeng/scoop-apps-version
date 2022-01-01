@@ -19,10 +19,11 @@ function getLatestVersion() {
 }
 
 function getLocalVersion() {
-    local userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
-    local versionUrl="https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/MouseInc"
+    # local userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+    # local versionUrl="https://raw.githubusercontent.com/JaimeZeng/scoop-apps-version/main/MouseInc"
     # curl -s -A "$userAgent" "$versionUrl" | grep -o 'Version=.*$' | sed 's/Version=//g'
-    curl -s -A "$userAgent" "$versionUrl" | jq -r ".version"
+    # curl -s -A "$userAgent" "$versionUrl" | jq -r ".version"
+    cat ../MouseInc | jq -r ".version"
     return $?
 }
 
@@ -56,15 +57,18 @@ function getGeneratedVersionInfo() {
 }
 
 function compareVersion() {
-    latestversion=($(getLatestVersion))
+    latestVersion=($(getLatestVersion))
     localVersion=($(getLocalVersion))
+    echo "Latest version： ${latestVersion}"
+    echo "Local version： ${localVersion}"
 
     # Compare Version
-    if [[ "${latestversion}" == "${localVersion}" ]]; then
+    if [[ "${latestVersion}" == "${localVersion}" ]]; then
         echo -e "${Green_font_prefix}[Info] MouseInc is the latest version!${Font_color_suffix}"
     else
         echo -e "${Green_font_prefix}[Info] Update MouseInc!${Font_color_suffix}"
         getGeneratedVersionInfo
+        git commit -am "version: update MouseInc(${localVersion} -> ${latestVersion})" >/dev/null 2>&1
     fi
 
 }

@@ -15,7 +15,20 @@ Tip="${Green_font_prefix}[Tip]${Font_color_suffix}"
 office_iso_zh_cn_ver="$(wget --user-agent="${userAgent}" --no-check-certificate -qO- "https://download.coolhub.top/Office_ISO/en-US/Current/" | grep -Po ">Office_Tool_Plus.*_x64_en-us.iso</a>" | grep -Po "[\d.]+" | head -n 1)"
 office_iso_zh_tw_ver="$(wget --user-agent="${userAgent}" --no-check-certificate -qO- "https://download.coolhub.top/Office_ISO/zh-CN/Current/" | grep -Po ">Office_Tool_Plus.*_x64_zh-cn.iso</a>" | grep -Po "[\d.]+" | head -n 1)"
 office_iso_en_us_ver="$(wget --user-agent="${userAgent}" --no-check-certificate -qO- "https://download.coolhub.top/Office_ISO/zh-TW/Current/" | grep -Po ">Office_Tool_Plus.*_x64_zh-tw.iso</a>" | grep -Po "[\d.]+" | head -n 1)"
-title="Office Tool Plus Offline Installer\n\n"
-content="zh_CN version = ${office_iso_zh_cn_ver}\nzh_TW version = ${office_iso_zh_tw_ver}\nen_US version = ${office_iso_en_us_ver}"
-echo -e "${title}${content}" >Office_ISO
-mv -f Office_ISO ../Office_ISO
+
+latestVersionArr=("${office_iso_zh_cn_ver}" "${office_iso_zh_tw_ver}" "${office_iso_en_us_ver}")
+localVersionArr=($(cat ../Office_ISO | grep -Po "[\d.]+"))
+echo "Latest version： ${latestVersionArr[*]}"
+echo "Local version： ${localVersionArr[*]}"
+
+# Compare Version
+if [[ "${latestVersionArr[0]}" == "${localVersionArr[0]}" ]] && [[ "${latestVersionArr[1]}" == "${localVersionArr[1]}" ]] && [[ "${latestVersionArr[2]}" == "${localVersionArr[2]}" ]]; then
+    echo -e "${Green_font_prefix}[Info] Office_ISO is the latest version!${Font_color_suffix}"
+else
+    echo -e "${Green_font_prefix}[Info] Update Office_ISO!${Font_color_suffix}"
+    title="Office Tool Plus Offline Installer\n\n"
+    content="zh_CN version = ${office_iso_zh_cn_ver}\nzh_TW version = ${office_iso_zh_tw_ver}\nen_US version = ${office_iso_en_us_ver}"
+    echo -e "${title}${content}" >Office_ISO
+    mv -f Office_ISO ../Office_ISO
+    git commit -am "version: update Office_ISO(Office-Tool-ISO-zh-cn: ${localVersionArr[0]} -> ${latestVersionArr[0]} Office-Tool-ISO-zh-tw: ${localVersionArr[1]} -> ${latestVersionArr[1]} Office-Tool-ISO-en-us: ${localVersionArr[2]} -> ${latestVersionArr[2]})" >/dev/null 2>&1
+fi
