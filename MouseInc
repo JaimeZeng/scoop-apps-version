@@ -1,7 +1,7 @@
 {
-    "check": "2021-12-22 23:35:51",
-    "version": "2.11.8",
-    "description": "调整全屏程序判断方式",
-    "url": "https://update.shuax.com/MouseInc/update2.11.8.zip",
-    "hash": "c+j35GVFfiePRVc1Hw8qToVaHz+i6krIxV1ZVJ0Wds0="
+    "check": "2022-01-15 06:31:02",
+    "version": "2.11.9",
+    "description": "优化不显示手势时效率",
+    "url": "https://update.shuax.com/MouseInc/update2.11.9.zip",
+    "hash": "UXnnV+6RD4SQc1nwGzTnHViJwmb9Zw72QszcrBCAwnA="
 }
